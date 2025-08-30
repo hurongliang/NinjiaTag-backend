@@ -1,0 +1,9 @@
+cryptography 
+filelock
+aiohttp 
+requests 
+cryptography 
+pycryptodome 
+srp 
+pbkdf2
+python-dotenv

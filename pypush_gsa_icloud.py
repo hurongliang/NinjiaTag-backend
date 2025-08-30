@@ -1,4 +1,5 @@
 from getpass import getpass
+import os
 import plistlib as plist
 import json
 import uuid
@@ -26,7 +27,10 @@ srp.no_username_in_x()
 import urllib3
 urllib3.disable_warnings()
 
-ANISETTE_URL = 'http://localhost:6969'  # https://github.com/Dadoum/anisette-v3-server
+from dotenv import load_dotenv
+load_dotenv()
+
+ANISETTE_URL = os.getenv("ANISETTE_URL")
 
 def icloud_login_mobileme(username='', password='', second_factor='sms'):
     if not username:

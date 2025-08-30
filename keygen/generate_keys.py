@@ -78,8 +78,6 @@ if args.nkeys < 1 or args.nkeys > MAX_KEYS:
 if args.nitems < 1 or args.nitems > MAX_ITEMS:
     raise argparse.ArgumentTypeError("Number of items out of range (between 1 and " + str(MAX_ITEMS) + ")")
 
-current_directory = os.getcwd()
-
 def random_prefix():
     if args.prefix is None:
         prefix = uuid.uuid4().hex.upper()
@@ -89,18 +87,18 @@ def random_prefix():
     return prefix
 
 def generate_mkeys():
-    lock_path = os.path.join(current_directory, 'keyMap.lock')
+    lock_path = os.path.join(OUTPUT_FOLDER, 'keyMap.lock')
     file_lock = FileLock(lock_path, timeout=30)
     
     # Create directories and verify keyMap.json within lock
     with file_lock:
         prefix = random_prefix()
-        PREFIX_FOLDER = prefix + '/'
+        PREFIX_FOLDER = f'{OUTPUT_FOLDER}/{prefix}/'
         if os.path.exists(PREFIX_FOLDER):
             shutil.rmtree(PREFIX_FOLDER)
         os.makedirs(PREFIX_FOLDER, exist_ok=True)
 
-        keyMap_path = os.path.join(current_directory, 'keyMap.json')
+        keyMap_path = os.path.join(OUTPUT_FOLDER, 'keyMap.json')
         if not os.path.exists(keyMap_path):
             with open(keyMap_path, 'w') as km:
                 json.dump([], km)
@@ -180,7 +178,7 @@ def generate_mkeys():
     # Update keyMap.json within lock
     try:
         with file_lock:
-            keyMap_path = os.path.join(current_directory, 'keyMap.json')
+            keyMap_path = os.path.join(OUTPUT_FOLDER, 'keyMap.json')
             if os.path.exists(keyMap_path):
                 with open(keyMap_path, 'r') as km:
                     updated_keyMap_data = json.load(km)
